@@ -15,7 +15,11 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "com.shreyas.stroll",
+      "config": {
+        "googleMapsApiKey": "AIzaSyCNu5kihZoY0HrqgnC9i2WebzfUQ2Bxxj4"
+      }
     },
     "android": {
       "adaptiveIcon": {
@@ -24,7 +28,11 @@
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/favicon.png",
+      "bundleIdentifier": "com.shreyas.stroll",
+      "config": {
+        "googleMapsApiKey": "AIzaSyCNu5kihZoY0HrqgnC9i2WebzfUQ2Bxxj4"
+      }
     }
   }
 }
