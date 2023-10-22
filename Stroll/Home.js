@@ -1,9 +1,10 @@
-import React from 'react';
-import { View, Text, Button, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, Modal, StyleSheet, Button } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 const Home = () => {
   const navigation = useNavigation();
+  const [isModalVisible, setModalVisible] = useState(false);
 
   const handleSearch = () => {
     // Navigate to the MapNavigation screen
@@ -15,17 +16,40 @@ const Home = () => {
     navigation.navigate('Rewards');
   };
 
+  const handleChallenge = () => {
+    setModalVisible(true);
+  };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Start Your Stroll</Text>
-      <View style={styles.optionContainer}>
-        <View style={styles.buttonBox}>
-          <Button title="Find My Current Location" onPress={handleSearch} color="indigo" />
-        </View>
-        <View style={styles.buttonBox}>
-          <Button title="Find Rewards" onPress={handleFindRewards} color="green" />
-        </View>
+      <View style={styles.buttonContainer}>
+        <TouchableOpacity style={styles.button} onPress={handleSearch}>
+          <Text style={styles.buttonText}>Find My Current Location</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={[styles.button, styles.greenButton]}
+          onPress={handleFindRewards}
+        >
+          <Text style={[styles.buttonText, styles.blackButtonText]}>Find Rewards</Text>
+        </TouchableOpacity>
       </View>
+      <TouchableOpacity style={styles.challengeButton} onPress={handleChallenge}>
+        <Text style={styles.challengeButtonText}>Daily Challenge</Text>
+      </TouchableOpacity>
+      <Modal visible={isModalVisible} transparent={true} animationType="slide">
+        <View style={styles.modalContainer}>
+          <View style={styles.modalContent}>
+            <Text style={styles.modalText}>Daily Challenge: Walk 5 miles</Text>
+            <Text style={styles.modalText}>Earn 10 points</Text>
+            <Button title="Close" onPress={closeModal} />
+          </View>
+        </View>
+      </Modal>
     </View>
   );
 };
@@ -35,23 +59,65 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: 'lavender',
+    backgroundColor: '#D8BFD8', // Lavender background color
   },
   heading: {
     fontSize: 36,
     fontWeight: 'bold',
-    marginBottom: 30,
-    color: 'dimgray',
+    marginBottom: 20,
+    color: 'black',
   },
-  optionContainer: {
+  buttonContainer: {
     alignItems: 'center',
     margin: 20,
   },
-  buttonBox: {
-    backgroundColor: 'white',
+  button: {
+    backgroundColor: 'white', // White button color
     borderRadius: 10,
-    padding: 10,
-    margin: 5,
+    padding: 16,
+    marginVertical: 10,
+    width: 250,
+    alignItems: 'center',
+  },
+  buttonText: {
+    color: 'black', // Black text color
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  greenButton: {
+    backgroundColor: 'black', // Black button color
+  },
+  blackButtonText: {
+    color: 'white', // White text color
+  },
+  challengeButton: {
+    position: 'absolute',
+    top: 10,
+    right: 10,
+    backgroundColor: 'black',
+    borderRadius: 20, // Make it circular
+    padding: 16,
+  },
+  challengeButtonText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    elevation: 5,
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 10,
   },
 });
 

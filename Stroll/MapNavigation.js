@@ -4,8 +4,7 @@ import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
 import { Marker } from 'react-native-maps';
 import * as Location from 'expo-location';
 
-const API_KEY = 'AIzaSyCNu5kihZoY0HrqgnC9i2WebzfUQ2Bxxj4'; // Replace with your actual Google Maps API key
-
+const API_KEY = 'AIzaSyCNu5kihZoY0HrqgnC9i2WebzfUQ2Bxxj4'; 
 const MapNavigation = () => {
 
   const [latitude, setLatitude] = useState(0);
@@ -29,9 +28,12 @@ const MapNavigation = () => {
 
   useEffect(() => {
     fetch (
-        'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + latitude + ',' + longitude + '&radius=4000&type=restaurant&key=' + API_KEY
-      ) .then(response => {return response.json()}) .then(response => {setPlaces(response.results)})
-  }, [])
+        `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${latitude},${longitude}&radius=1000&type=restaurant&key=${API_KEY}`
+      )
+      .then(response => response.json())
+      .then(response => setPlaces(response.results))
+      .catch(error => console.error(error));
+  }, [latitude, longitude]);
 
   const beginWalk = () => {
     if (destination) {
