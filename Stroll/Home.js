@@ -7,12 +7,10 @@ const Home = () => {
   const [isModalVisible, setModalVisible] = useState(false);
 
   const handleSearch = () => {
-    // Navigate to the MapNavigation screen
     navigation.navigate('MapNavigation');
   };
 
   const handleFindRewards = () => {
-    // Navigate to the Rewards screen
     navigation.navigate('Rewards');
   };
 
@@ -59,7 +57,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
-    backgroundColor: '#D8BFD8', // Lavender background color
+    backgroundColor: '#D8BFD8', 
   },
   heading: {
     fontSize: 36,
@@ -72,7 +70,7 @@ const styles = StyleSheet.create({
     margin: 20,
   },
   button: {
-    backgroundColor: 'white', // White button color
+    backgroundColor: 'white', 
     borderRadius: 10,
     padding: 16,
     marginVertical: 10,
@@ -80,22 +78,22 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   buttonText: {
-    color: 'black', // Black text color
+    color: 'black', 
     fontSize: 18,
     fontWeight: 'bold',
   },
   greenButton: {
-    backgroundColor: 'black', // Black button color
+    backgroundColor: 'black', 
   },
   blackButtonText: {
-    color: 'white', // White text color
+    color: 'white', 
   },
   challengeButton: {
     position: 'absolute',
     top: 10,
     right: 10,
     backgroundColor: 'black',
-    borderRadius: 20, // Make it circular
+    borderRadius: 20, 
     padding: 16,
   },
   challengeButtonText: {
