@@ -1,12 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Modal, TouchableOpacity } from 'react-native';
+import { View, Text, TextInput, Button, StyleSheet, TouchableOpacity } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const Home = () => {
   const [zipCode, setZipCode] = useState('');
   const [currentLocation, setCurrentLocation] = useState(null);
   const [nearbyLocations, setNearbyLocations] = useState([]);
-  const [selectedLocation, setSelectedLocation] = useState(null);
   const [searchInitiated, setSearchInitiated] = useState(false); // Track if search has been initiated
+  const navigation = useNavigation();
 
   const handleZipCodeChange = (text) => {
     setZipCode(text);
@@ -18,7 +19,7 @@ const Home = () => {
     } else if (currentLocation) {
       alert(`Your current location is: ${currentLocation.coords.latitude}, ${currentLocation.coords.longitude}`);
     }
-    setSearchInitiated(true); // Set searchInitiated to true
+    setSearchInitiated(true);
   };
 
   const findCurrentLocation = () => {
@@ -31,11 +32,11 @@ const Home = () => {
         alert('Failed to retrieve your current location. Please enter a zip code.');
       }
     );
-    setSearchInitiated(true); // Set searchInitiated to true
+    setSearchInitiated(true);
   };
 
   const fetchNearbyLocations = () => {
-    // Hypothetical: Fetch nearby locations using an API
+    // Need to use an API to fetch nearby locations
     const fetchedLocations = [
       { name: 'Restaurant A', type: 'restaurant' },
       { name: 'Shop B', type: 'shop' },
@@ -45,31 +46,31 @@ const Home = () => {
     setNearbyLocations(fetchedLocations);
   };
 
+  const handleLocationClick = (location) => {
+    navigation.navigate('MapNavigation');
+  };
+
   useEffect(() => {
     if (searchInitiated) {
       fetchNearbyLocations();
     }
   }, [searchInitiated]);
 
-  const handleLocationClick = (location) => {
-    setSelectedLocation(location);
-    // Handle location click as needed
-  };
-
   return (
     <View style={styles.container}>
       <Text style={styles.heading}>Start Your Stroll</Text>
-      <TextInput
-        style={styles.input}
-        placeholder="Enter Zip Code"
-        value={zipCode}
-        onChangeText={handleZipCodeChange}
-        keyboardType="numeric"
-      />
-      <View style={styles.buttonContainer}>
+      <View style={styles.optionContainer}>
+        <TextInput
+          style={styles.input}
+          placeholder="Enter Zip Code"
+          value={zipCode}
+          onChangeText={handleZipCodeChange}
+          keyboardType="numeric"
+        />
         <Button title="Search" onPress={handleSearch} color="darkgray" />
-        <Button title="Find My Current Location" onPress={findCurrentLocation} color="darkgray" />
       </View>
+      <Text style={styles.orText}>OR</Text>
+      <Button title="Find My Current Location" onPress={findCurrentLocation} color="darkgray" />
       {currentLocation && (
         <Text style={styles.locationText}>
           Your current location: {currentLocation.coords.latitude}, {currentLocation.coords.longitude}
@@ -89,40 +90,39 @@ const Home = () => {
 };
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: 'lavender',
-      },
-      heading: {
-        fontSize: 30, // Increase the font size
-        fontWeight: 'bold', // Make it bold
-        marginBottom: 20,
-        fontFamily: 'YourCustomFont',
-        color: 'gray',
-      },
-      input: {
-        width: '80%',
-        height: 40,
-        borderColor: 'gray',
-        borderWidth: 1,
-        marginBottom: 10,
-        paddingLeft: 10,
-      },
-      buttonContainer: {
-        alignItems: 'center',
-      },
-
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'lavender',
+  },
+  heading: {
+    fontSize: 30,
+    fontWeight: 'bold',
+    marginBottom: 20,
+    color: 'dimgray',
+  },
+  optionContainer: {
+    alignItems: 'center',
+  },
+  input: {
+    width: '80%',
+    height: 40,
+    borderColor: 'darkgray',
+    borderWidth: 1,
+    marginBottom: 10,
+    paddingLeft: 10,
+  },
+  orText: {
+    fontSize: 18,
+    marginVertical: 20,
+    color: 'dimgray',
+  },
   locationText: {
     fontSize: 16,
     marginVertical: 5,
     color: 'blue',
   },
-
- 
-
-
 });
 
 export default Home;
