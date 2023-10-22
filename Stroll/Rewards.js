@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { View, Text} from 'react-native';
-import './Rewards.css'
+import { View, Text, StyleSheet, Button} from 'react-native';
+// import './Rewards.css'
 
 var coupons = [
     { store: "Walmart", code: "HELLO", amount: "10%", exp: "1/1/2024" },
@@ -15,16 +15,32 @@ function pressed(){
 const Rewards = () => {
     
     return (
-        <div>
-      {coupons.map(((item) => (
-        <div key={item.id} className="post">
-          <h3>{item.store} - {item.amount} Off</h3>
-          <p>Code: {item.code}<button onClick={pressed}>REDEEM</button></p>
-          <p>Expires: {item.exp}</p>
-        </div>
-      )))}
-    </div>
+        coupons.map((item) => (
+        <View style = { styles.view }>
+          <Text>{item.store} - {item.amount} Off</Text>
+          <Text>Code: {item.code}<Button 
+            onClick={pressed}
+            title = "REDEEM"
+            /></Text>
+          <Text>Expires: {item.exp}</Text>
+        </View>
+      ))
+    
     )
 }
 
 export default Rewards;
+
+const styles = StyleSheet.create({
+    view: {
+        color: 'rgb(255, 255, 255)',
+        backgroundColor: 'rgb(0, 122, 33)',
+        margin: 2,
+        padding: 1,
+        fontFamily: "Arial"
+    },
+    map: {
+      width: '100%',
+      height: '100%',
+    },
+  });
