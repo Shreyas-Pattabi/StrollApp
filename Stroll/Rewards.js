@@ -19,6 +19,7 @@ const Rewards = () => {
         <View style = { styles.view }>
           <Text>{item.store} - {item.amount} Off</Text>
           <Text>Code: {item.code}<Button 
+            style = {styles.btn}
             onClick={pressed}
             title = "REDEEM"
             /></Text>
@@ -39,8 +40,7 @@ const styles = StyleSheet.create({
         padding: 1,
         fontFamily: "Arial"
     },
-    map: {
-      width: '100%',
-      height: '100%',
+    btn: {
+      color: 'rgb(255, 255, 255)',
     },
   });
