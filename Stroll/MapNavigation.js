@@ -1,51 +1,72 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Alert, Text } from 'react-native';
+import { StyleSheet, View, Image, Alert, Text, TextInput, Pressable } from 'react-native';
 import MapView, { PROVIDER_GOOGLE } from 'react-native-maps';
+import { Marker } from 'react-native-maps';
+import * as Location from 'expo-location';
 
 const API_KEY = 'AIzaSyCNu5kihZoY0HrqgnC9i2WebzfUQ2Bxxj4'; // Replace with your actual Google Maps API key
 
-const MapNavigation = ({ route }) => {
-  const { zipCode } = route.params;
-  const [coordinates, setCoordinates] = useState(null);
+const MapNavigation = () => {
+
+  const [latitude, setLatitude] = useState(0);
+  const [longitude, setLongitude] = useState(0);
+  const [places, setPlaces] = useState([]);
+  const [destination, setDestination] = useState(null);
+  const [walking, setWalking] = useState(false);
 
   useEffect(() => {
-    if (zipCode) {
-      fetch(`https://maps.googleapis.com/maps/api/geocode/json?address=${zipCode}&key=AIzaSyCNu5kihZoY0HrqgnC9i2WebzfUQ2Bxxj4`)
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.status === 'OK' && data.results.length > 0) {
-            const result = data.results[0];
-            const location = result.geometry.location;
-            setCoordinates({ latitude: location.lat, longitude: location.lng });
-          } else {
-            Alert.alert('Geocoding failed', 'No results found for the provided ZIP code.');
-          }
-        })
-        .catch((error) => {
-          console.error(error);
-          Alert.alert('Geocoding failed', 'An error occurred while geocoding.');
-        });
+    const getPermissions = async() => {
+      let { status } = await Location.requestForegroundPermissionsAsync();
+      if (status !== 'granted') {
+        return;
+      }
+      let currentLocation = await Location.getCurrentPositionAsync({});
+      setLatitude(currentLocation.coords.latitude);
+      setLongitude(currentLocation.coords.longitude);
+    };
+    getPermissions();
+  }, []);
+
+  useEffect(() => {
+    fetch (
+        'https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=' + latitude + ',' + longitude + '&radius=4000&type=restaurant&key=' + API_KEY
+      ) .then(response => {return response.json()}) .then(response => {setPlaces(response.results)})
+  }, [])
+
+  const beginWalk = () => {
+    if (destination) {
+      setWalking(true);
+      setDestination(null);
     }
-  }, [zipCode]);
+  }
+
+  const endWalk = () => {
+    setWalking(false);
+    setDestination(null);
+  }
 
   return (
-    <View style={styles.container}>
-      {coordinates ? (
-        <MapView
-          style={styles.map}
+    
+    <View style = {styles.container}>
+      <MapView
+          style={styles.mapPlaceholder}
           provider={PROVIDER_GOOGLE}
-          initialRegion={{
-            latitude: coordinates.latitude,
-            longitude: coordinates.longitude,
-            latitudeDelta: 0.0922,
-            longitudeDelta: 0.0421,
-          }}
-        />
-      ) : (
-        <View style={styles.mapPlaceholder}>
-          <Text style={styles.mapPlaceholderText}>Geocoding in progress...</Text>
-        </View>
-      )}
+          region={{
+            latitude: latitude,
+            longitude: longitude,
+            latitudeDelta: 0.1,
+            longitudeDelta: 0.05
+          }}>
+        
+        {places.map(place => (
+          <Marker 
+            key = {place.id}
+            coordinate={{latitude: place.geometry.location.lat, longitude: place.geometry.location.lng}}
+            title = {place.name}
+            onPress = {() => setDestination(place)}
+          />
+      ))}
+      </MapView>
     </View>
   );
 };
