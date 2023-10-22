@@ -6,7 +6,7 @@ const Home = () => {
   const [zipCode, setZipCode] = useState('');
   const [currentLocation, setCurrentLocation] = useState(null);
   const [nearbyLocations, setNearbyLocations] = useState([]);
-  const [searchInitiated, setSearchInitiated] = useState(false); // Track if search has been initiated
+  const [searchInitiated, setSearchInitiated] = useState(false);
   const navigation = useNavigation();
 
   const handleZipCodeChange = (text) => {
@@ -36,7 +36,6 @@ const Home = () => {
   };
 
   const fetchNearbyLocations = () => {
-    // Need to use an API to fetch nearby locations
     const fetchedLocations = [
       { name: 'Restaurant A', type: 'restaurant' },
       { name: 'Shop B', type: 'shop' },
@@ -68,9 +67,8 @@ const Home = () => {
           keyboardType="numeric"
         />
         <Button title="Search" onPress={handleSearch} color="darkgray" />
+        <Button title="Find My Current Location" onPress={findCurrentLocation} color="darkgray" />
       </View>
-      <Text style={styles.orText}>OR</Text>
-      <Button title="Find My Current Location" onPress={findCurrentLocation} color="darkgray" />
       {currentLocation && (
         <Text style={styles.locationText}>
           Your current location: {currentLocation.coords.latitude}, {currentLocation.coords.longitude}
@@ -97,13 +95,14 @@ const styles = StyleSheet.create({
     backgroundColor: 'lavender',
   },
   heading: {
-    fontSize: 30,
+    fontSize: 26,
     fontWeight: 'bold',
     marginBottom: 20,
     color: 'dimgray',
   },
   optionContainer: {
     alignItems: 'center',
+    margin: 20,
   },
   input: {
     width: '80%',
@@ -112,11 +111,6 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginBottom: 10,
     paddingLeft: 10,
-  },
-  orText: {
-    fontSize: 18,
-    marginVertical: 20,
-    color: 'dimgray',
   },
   locationText: {
     fontSize: 16,
